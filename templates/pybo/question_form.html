@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+  <h5 class="my-3 border-bottom pb-2">질문등록</h5>
+  <form method="post" class="post-form my-3">
+    {% csrf_token %}
+
+    {% if form.errors %}
+      <div class="alert alert-danger" role="alert">
+        {% for field in form %}
+          {% if field.errors %}
+            <strong>{{ field.label }}</strong>
+            {{ field.errors }}
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <div class="form-group">
+      <label for="subject">제목:</label>
+      <input type="text" name="subject" class="form-control" required="required" id="subject" value="{{ from.subject.value|default_if_none:'' }} ">
+      {% if form.subject.errors %}
+        <div class="text-danger">
+          {% for error in form.subject.errors %}
+            <div>
+              <i class="fa-solid fa-triangle-exclamation"></i>
+              {{ error }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="form-group">
+      <label for="content">내용:</label>
+      <textarea name="content" rows="10" class="form-control" id="content">{{ from.content.value|default_if_none:'' }}</textarea>
+      {% if form.content.errors %}
+        <div class="text-danger">
+          {% for error in form.content.errors %}
+            <div>
+              <i class="fa-solid fa-triangle-exclamation"></i>
+              {{ error }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+      <i class="fa-solid fa-check"></i>
+      저장하기
+    </button>
+
+    <a href="{% url 'pybo:index' %}" class="btn btn-primary">
+      <i class="fa-solid fa-list-ul"></i>
+      목록으로
+    </a>
+
+  </form>
+
+{% endblock content %}
