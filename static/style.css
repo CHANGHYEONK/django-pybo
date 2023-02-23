@@ -4,3 +4,7 @@
 * {
     font-family: 'Noto Sans KR', sans-serif;
 }
+
+.page-link {
+    border: 0px;
+}

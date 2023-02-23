@@ -14,7 +14,7 @@
       {% if question_list %}
         {% for question in question_list %}
           <tr>
-            <td>{{ forloop.counter }}</td>
+            <td>{{ question.id }}</td>
             <td>
               <a href="{% url 'pybo:detail' question.id %}">{{ question.subject }}</a>
             </td>
@@ -28,6 +28,8 @@
       {% endif %}
     </tbody>
   </table>
+
+  {% include 'pybo/pagination.html' %}
 
   <a href="{% url 'pybo:question_create' %}" class="btn btn-primary">
     <i class="fa-regular fa-pen-to-square mr-2"></i>
