@@ -2,41 +2,100 @@
 
 {% block content %}
 
+  <!-- 사용자오류 표시 -->
+  {% if messages %}
+    <div class="alert alert-danger my-3" role="alert">
+      {% for message in messages %}
+        <strong>{{ message.tags }}</strong>
+        <ui>
+          <li>{{ message.message }}</li>
+        </ui>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <!-- 맨 윗줄 제목 -->
   <h2 class="border-bottom py-2 text-primary">
     <i class="fa-regular fa-circle-question"></i>
     {{ question.subject}}
   </h2>
+  <!-- 제목 + 우측 하단 작성자 & 작성시간 -->
   <div class="card my-3">
     <div class="card-body">
       <div class="card-text" style="white-space: pre-line;">{{ question.content }}</div>
       <div class="d-flex justify-content-end">
-        <div class="badge badge-primary p-2">
-          <i class="fa-regular fa-clock"></i>
-          {{ question.create_date}}
+
+        {% if question.modify_date %}
+          <div class="badge badge-light p-2 mr-2 text-left mx-3">
+            <div>
+              class="mb-2">modified at</div>
+            <div>{{ question.modify_date | date:"Y-m-d H:i" }}</div>
+          </div>
+        {% endif %}
+
+        <div class="badge badge-primary p-2 text-left">
+          <div class="mb-2">
+            <img class="avarta" src="https://randomuser.me/api/portraits/men/{{question.author.id}}.jpg"/>
+            {{ question.author.username }}</div>
+          <div>
+            <i class="fa-regular fa-clock"></i>
+            {{ question.create_date | date:"Y-m-d H:i"}}
+          </div>
         </div>
       </div>
+      <!-- 질문 수정 & 삭제 버튼 등록 -->
+      {% if request.user == question.author %}
+        <div class="my-3">
+          <a href="{% url 'pybo:question_modify' question.id %}" class="btn btn-sm btn-outline-secondary">수정</a>
+          <a href="#" class="delete btn btn-sm btn-outline-secondary text-danger" data-uri="{% url 'pybo:question_delete' question.id %}">삭제</a>
+        </div>
+      {% endif %}
     </div>
   </div>
+  <!-- div.card 이런 식으로 닫는 태그에 주석 달아두면 위치 아는데 도움 됨 -->
 
+  <!-- 답변 몇 개 있다 출력하는 줄 -->
   <h5 class="border-bottom my-3 py-2">
     <i class="fa-solid fa-comments"></i>
     {{ question.answer_set.count }}개의 답변이 있습니다.
   </h5>
 
+  <!-- 답변 싹 출력 + 각각 우측 하단에 답변 단 사람 & 답변 시간 -->
   {% for answer in question.answer_set.all %}
     <div class="card my-3">
       <div class="card-body">
         <div class="card-text" style="white-space: pre-line;">{{ answer.content }}</div>
         <div class="d-flex justify-content-end">
-          <div class="badge badge-success p-2">
-            <i class="fa-regular fa-clock"></i>
-            {{ answer.create_date }}
+
+          {% if answer.modify_date %}
+            <div class="badge badge-light p-2 mr-2 text-left mx-3">
+              <div class="mb-2">modified at</div>
+              <div>{{ answer.modify_date | date:"Y-m-d H:i" }}</div>
+            </div>
+          {% endif %}
+
+          <div class="badge badge-success p-2 text-left">
+            <div class="mb-2">
+              <img class="avarta" src="https://randomuser.me/api/portraits/men/{{answer.author.id}}.jpg"/>
+              {{ answer.author.username }}</div>
+            <div>
+              <i class="fa-regular fa-clock"></i>
+              {{ answer.create_date | date:"Y-m-d H:i" }}
+            </div>
           </div>
         </div>
+        <!-- 답변 수정 & 삭제 버튼 등록 -->
+        {% if request.user == answer.author %}
+          <div class="my-3">
+            <a href="{% url 'pybo:answer_modify' answer.id %}" class="btn btn-sm btn-outline-secondary">수정</a>
+            <a href="#" class="delete btn btn-sm btn-outline-secondary text-danger" data-uri="{% url 'pybo:answer_delete' answer.id %}">삭제</a>
+          </div>
+        {% endif %}
       </div>
     </div>
   {% endfor %}
 
+  <!-- 질문에 대한 답변 다는 form 부분 -->
   <form action="{% url 'pybo:answer_create' question.id %}" method="post">
     {% csrf_token %}
 
@@ -52,9 +111,29 @@
     {% endif %}
 
     <div class="form-group">
-      <textarea name="content" id="content" rows="10" class="form-control"></textarea>
+      <textarea {% if not user.is_authenticated %} disabled="disabled" {% endif %} name="content" id="content" rows="10" class="form-control"></textarea>
     </div>
     <input type="submit" value="답변등록" class="btn btn-primary">
   </form>
 
 {% endblock content %}
+
+<!-- JS 처리 -->
+{% block script %}
+
+  <script>
+    $(document).ready(function () {
+      console.log('로딩완료');
+      let btns = $('.delete');
+      btns.on('click', function () {
+        console.log('click 발생');
+        let answer = confirm('정말 삭제할까요?');
+        if (answer) {
+          // console.log($(this).data('uri')) 이렇게 하면 삭제 버튼 클릭 시 url 출력
+          location.href = $(this).data('uri')
+        }
+      })
+    });
+  </script>
+  <!-- console.log('페이지 로드완료!') => 파이썬 print 같은 역할 f12누르면 CONSOLE 뜨는데 거기에 출력한다는 의미 -->
+{% endblock script %}
