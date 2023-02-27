@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="mx-auto auth-form">
+    <!-- form-control이 부모의 100%이기 때문에 / 가운데 정렬 -->
+    <div class="row mb-5">
+
+      <h2 class="col-4">
+        <i class="fa-solid fa-right-to-bracket"></i>로그인</h2>
+
+      <div class="col-8 text-right">
+        또는
+        <a href="{% url 'common:signup' %}">계정을 만드세요.</a>
+      </div>
+
+    </div>
+
+    {% if next %}
+      <!-- next에 값이 있나 없나 판단 -->
+      <div class="text-danger mb-3">
+        로그인이 필요한 서비스 입니다. 먼저 로그인하세요.
+      </div>
+    {% endif %}
+
+    {% include 'form_errors.html' %}
+
+    <form method="post" class="post-form">
+
+      {% csrf_token %}
+
+      <div class="form-group">
+        <label for="username">사용자ID</label>
+        <input type="text" class="form-control" name="username" id="username" value="{{ form.username.value|default_if_none:'' }}">
+      </div>
+
+      <div class="form-group">
+        <label for="password">비밀번호</label>
+        <input type="password" class="form-control" name="password" id="password" value="{{ form.password.value|default_if_none:'' }}">
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100 mb-1">
+        <i class="fa-solid fa-right-to-bracket"></i>
+        로그인</button>
+
+      <a href="{% url 'common:signup' %}" class="btn btn-primary w-100">
+        <i class="fa-solid fa-user-plus"></i>
+        회원가입</a>
+
+    </form>
+  </div>
+{% endblock content %}
