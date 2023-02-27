@@ -3,8 +3,9 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class Question(models.Model):
-    subject = models.CharField('제목', max_length=200)
-    content = models.TextField('내용')
+    subject = models.CharField('제목', max_length=200,
+                               help_text='질문의 제목을 한 줄로 작성하세요.')
+    content = models.TextField('내용', help_text='질문의 내용을 상세히 작성하세요.')
     create_date = models.DateTimeField('생성일')
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     modify_date = models.DateTimeField(null=True, blank=True)

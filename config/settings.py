@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "bootstrap4",
     "pybo",
     "common"    # CommonConfig (apps에 있는 클래스) 이걸로 등록해도 됨
 ]
