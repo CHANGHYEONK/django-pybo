@@ -19,49 +19,64 @@
     <i class="fa-regular fa-circle-question"></i>
     {{ question.subject}}
   </h2>
-  <!-- 제목 + 우측 하단 작성자 & 작성시간 -->
-  <div class="card my-3">
-    <div class="card-body">
-      <div class="card-text" style="white-space: pre-line;">{{ question.content }}</div>
-      <div class="d-flex justify-content-end">
 
-        {% if question.modify_date %}
-          <div class="badge badge-light p-2 mr-2 text-left mx-3">
-            <div>
-              class="mb-2">modified at</div>
-            <div>{{ question.modify_date | date:"Y-m-d H:i" }}</div>
-          </div>
-        {% endif %}
-
-        <div class="badge badge-primary p-2 text-left">
-          <div class="mb-2">
-            <img class="avarta" src="https://randomuser.me/api/portraits/men/{{question.author.id}}.jpg"/>
-            {{ question.author.username }}</div>
-          <div>
-            <i class="fa-regular fa-clock"></i>
-            {{ question.create_date | date:"Y-m-d H:i"}}
-          </div>
-        </div>
+  <div class="row my-3">
+    <div class="col-1">
+      <!-- 추천 영역 -->
+      <div class="bg-danger text-center p-3 border font-weight-bolder mb-1">
+        {{ question.voter.count }}
       </div>
-      <!-- 질문 수정 & 삭제 버튼 등록 -->
-      {% if request.user == question.author %}
-        <div class="my-3">
-          <a href="{% url 'pybo:question_modify' question.id %}" class="btn btn-sm btn-outline-secondary">수정</a>
-          <a href="#" class="delete btn btn-sm btn-outline-secondary text-danger" data-uri="{% url 'pybo:question_delete' question.id %}">삭제</a>
-        </div>
-      {% endif %}
+      <a href="#" data-uri="{% url 'pybo:vote_question' question.id %}" class="recommend btn btn-sm btn-secondary btn-block my-1">추천</a>
     </div>
 
-    {% include 'pybo/comment_question.html' %}
+    <div class="col-11">
+      <!-- 질문 영역 -->
+      <!-- 제목 + 우측 하단 작성자 & 작성시간 -->
+      <div class="card">
+        <div class="card-body">
+          <div class="card-text" style="white-space: pre-line;">{{ question.content }}</div>
+          <div class="d-flex justify-content-end">
 
+            {% if question.modify_date %}
+              <div class="badge badge-success p-2 mr-2 text-left mx-3">
+                <div class="mb-2">
+                  modified at</div>
+                <div>{{ question.modify_date | date:"Y-m-d H:i" }}</div>
+              </div>
+            {% endif %}
+
+            <div class="badge badge-primary p-2 text-left">
+              <div class="mb-2">
+                <img class="avarta" src="https://randomuser.me/api/portraits/men/{{question.author.id}}.jpg"/>
+                {{ question.author.username }}</div>
+              <div>
+                <i class="fa-regular fa-clock"></i>
+                {{ question.create_date | date:"Y-m-d H:i"}}
+              </div>
+            </div>
+          </div>
+          <!-- 질문 수정 & 삭제 버튼 등록 -->
+          {% if request.user == question.author %}
+            <div class="my-3">
+              <a href="{% url 'pybo:question_modify' question.id %}" class="btn btn-sm btn-outline-secondary">수정</a>
+              <a href="#" class="delete btn btn-sm btn-outline-secondary text-danger" data-uri="{% url 'pybo:question_delete' question.id %}">삭제</a>
+            </div>
+          {% endif %}
+        </div>
+
+        {% include 'pybo/comment_question.html' %}
+
+      </div>
+      <!-- div.card 이런 식으로 닫는 태그에 주석 달아두면 위치 아는데 도움 됨 -->
+
+    </div>
   </div>
-  <!-- div.card 이런 식으로 닫는 태그에 주석 달아두면 위치 아는데 도움 됨 -->
 
   {% include 'pybo/answer_list.html' %}
 
   {% include 'pybo/answer_create_form.html' %}
 
-  <a href="{% url 'pybo:index' %}">목록보기</a>
+  <a href="{% url 'pybo:index' %}" class="btn btn-primary mt-1">목록보기</a>
 
 {% endblock content %}
 
@@ -77,9 +92,16 @@
         let answer = confirm('정말 삭제할까요?');
         if (answer) {
           // console.log($(this).data('uri')) 이렇게 하면 삭제 버튼 클릭 시 url 출력
-          location.href = $(this).data('uri')
+          location.href = $(this).data('uri');
         }
-      })
+      });
+
+      $('.recommend').on('click', function () {
+        if (confirm('정말로 추천하시겠습니까?')) {
+          location.href = $(this).data('uri');
+        }
+      });
+
     });
   </script>
   <!-- console.log('페이지 로드완료!') => 파이썬 print 같은 역할 f12누르면 CONSOLE 뜨는데 거기에 출력한다는 의미 -->
