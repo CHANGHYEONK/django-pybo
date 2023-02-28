@@ -21,6 +21,12 @@
     width: 100%;
 }
 
+.comment {
+    border-top: dotted 1px #ddd;
+    font-size: 0.7em;
+}
+
+
 /* 반응형 웹의 원리 @media(조건) {css문} => 조건 만족하면 css문 실행하라 */
 /* mobile first */
 /* 모바일보다 커지면(width가 540이상이면) 이 조건으로 해라 */
