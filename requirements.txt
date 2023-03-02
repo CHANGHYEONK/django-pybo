@@ -1,0 +1,12 @@
+asgiref==3.6.0
+beautifulsoup4==4.11.2
+certifi @ file:///C:/b/abs_85o_6fm0se/croot/certifi_1671487778835/work/certifi
+Django==4.1.7
+django-bootstrap4==22.3
+importlib-metadata==6.0.0
+Markdown==3.4.1
+soupsieve==2.4
+sqlparse==0.4.3
+tzdata==2022.7
+wincertstore==0.2
+zipp==3.15.0

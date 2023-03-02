@@ -1,15 +1,18 @@
+{% comment %} pagination 작업할 땐 포메터 false {% endcomment %}
+
 <ul class="pagination justify-content-center">
 
   <!-- 이전 작업 -->
   {% if question_list.has_previous %}
-    <li>
-      <a class="page-link" href="?page=1">
+    <li class="page-item">
+      <a class="page-link" href="#" data-page="1">
         <i class="fa-sharp fa-solid fa-arrow-left-long-to-line"></i>
         처음으로
       </a>
     </li>
     <li class="page-item">
-      <a class="page-link" href="?page={{ question_list.previous_page_number }}">
+      <a class="page-link" href="#"
+      data-page="{{ question_list.previous_page_number }}">
         <i class="fa-solid fa-angle-left"></i>
         이전
       </a>
@@ -38,7 +41,7 @@
         </li>
       {% else %}
         <li class="page-item">
-          <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+          <a class="page-link" href="#" data-page="{{ page_number }}">{{ page_number }}</a>
         </li>
       {% endif %}
     {% endif %}
@@ -47,13 +50,13 @@
   <!-- 다음 작업 -->
   {% if question_list.has_next %}
     <li class="page-item">
-      <a class="page-link" href="?page={{ question_list.next_page_number }}">
+      <a class="page-link" href="#" data-page="?{{ page_number }}">
         다음
         <i class="fa-solid fa-angle-right"></i>
       </a>
     </li>
-    <li>
-      <a class="page-link" href="?page={{ question_list.paginator.num_pages }}">
+    <li> <!-- href="?page={{ question_list.paginator.num_pages }}" 기존에 이렇게 작업 -->
+      <a class="page-link" href="#" data-page="{{ question_list.paginator.num_pages }}">
         끝으로
         <i class="fa-solid fa-arrow-right-to-line"></i>
       </a>

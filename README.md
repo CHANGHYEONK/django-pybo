@@ -10,7 +10,7 @@
   - 반응형 웹
 - 웹 에디터
 
-[장고 홈페이지](https://www.google.com)
+[장고 홈페이지](https://docs.djangoproject.com/ko/4.1/intro/)
 
 ```
 print('django)
