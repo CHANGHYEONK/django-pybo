@@ -5,6 +5,7 @@ Django==4.1.7
 django-bootstrap4==22.3
 importlib-metadata==6.0.0
 Markdown==3.4.1
+mysqlclient==2.1.1
 soupsieve==2.4
 sqlparse==0.4.3
 tzdata==2022.7
